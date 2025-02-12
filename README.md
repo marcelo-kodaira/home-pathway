@@ -1,6 +1,8 @@
 # Census.gov Income Integration
 
 Live Preview: https://home-pathway-nu5t.vercel.app/
+This project is hosted on Vercel to optimize costs while ensuring high availability and performance.
+The repository includes Terraform scripts and a GitHub Actions pipeline for AWS deployment, but they are not actively used since Vercel is the primary hosting solution
 
 End to End Tests
 ![image](https://github.com/user-attachments/assets/75d6fa7a-46f6-4a5a-a1a0-b4d657eaec47)
