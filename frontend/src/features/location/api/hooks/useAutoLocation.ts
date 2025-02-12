@@ -12,11 +12,11 @@ export const useAutoLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setCoords({ lat: 29.7604, lon: -95.3698 });
-          //   setCoords({
-          //     lat: position.coords.latitude,
-          //     lon: position.coords.longitude,
-          //   });
+          //setCoords({ lat: 29.7604, lon: -95.3698 });
+          setCoords({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+          });
         },
         (error) => {
           console.error("Geolocation error:", error);
