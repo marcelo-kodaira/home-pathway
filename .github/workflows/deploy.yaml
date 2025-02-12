@@ -1,0 +1,83 @@
+name: Deploy pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Validate environment
+        run: |
+          echo "Validating branch..."
+          if [[ "${{ github.ref_name }}" != "main" ]]; then
+            echo "Branch does not support deploy: ${{ github.ref_name }}"
+            exit 1
+          fi
+          echo "Environment: ${{ github.ref_name }}"
+
+      - name: Check S3 bucket existence
+        run: |
+          BUCKET_NAME=${{ secrets.BUCKET_NAME }}
+          echo "Verifying bucket name S3: $BUCKET_NAME"
+          if ! aws s3 ls "s3://$BUCKET_NAME" > /dev/null 2>&1; then
+            echo "Bucket $BUCKET_NAME does not exists."
+            exit 1
+          fi
+          echo "Bucket $BUCKET_NAME exists."
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build frontend
+        run: |
+          echo "Building..."
+          npm run build:homol
+
+      - name: Deploy to S3
+        run: |
+          echo "Starting S3 sync..."
+          aws s3 sync ./dist s3://$BUCKET_NAME --delete
+          echo "S3 sync finished."
+
+      - name: Set CloudFront Distribution ID
+        run: echo "CLOUDFRONT_DISTRIBUTION_ID=${{ secrets.CLOUDFRONT_DISTRIBUTION }}" >> $GITHUB_ENV
+
+      - name: Log CloudFront Distribution ID
+        run: |
+          echo "Cloudfront ID: $CLOUDFRONT_DISTRIBUTION_ID"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          echo "Invalidating Cloudfront..."
+          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+          echo "Cloudfront Invalidated."

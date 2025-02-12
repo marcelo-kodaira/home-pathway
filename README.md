@@ -30,7 +30,7 @@ This project is a prototype designed to integrate Census.gov income data into a 
 ### Backend Integration
 
 - **Data Fetching:**  
-  We use Axios and Tan Stack Query to perform HTTP GET requests to the Census.gov endpoints. The endpoints are constructed using helper functions (e.g., `censusRoutes.counties` and `censusRoutes.medianIncome`) to maintain consistency. There is a clear sepparation of the api layer and the presentation layer.
+  Use Axios and Tan Stack Query to perform HTTP GET requests to the Census.gov endpoints. The endpoints are constructed using helper functions (e.g., `censusRoutes.counties` and `censusRoutes.medianIncome`) to maintain consistency. There is a clear sepparation of the api layer and the presentation layer.
 - **Error Handling with React Query:**  
   React Query manages API state and error handling. When an API call fails (for example, in the counties fetch), the error is caught and stored as `query.error`. This triggers error notifications via React Toastify.
 - **Data Normalization:**  
@@ -70,7 +70,7 @@ This project is a prototype designed to integrate Census.gov income data into a 
 ## Key Challenges and Resolutions
 
 - **Complex API Endpoints:**  
-  Census.gov endpoints require precise query parameters. We addressed this by centralizing URL construction in helper objects, reducing errors and improving testability.
+  Census.gov endpoints require precise query parameters. Addressed this by centralizing URL construction in helper objects, reducing errors and improving testability.
 - **Robust Error Handling:**  
   API failures (e.g., counties data not fetched) were handled using React Query’s built-in error handling. Toast notifications ensure that users receive immediate feedback.
 - **Auto-location Reliability:**  
@@ -88,7 +88,7 @@ This project is a prototype designed to integrate Census.gov income data into a 
   - **Centralized Error Handling:** Simplifies logging and monitoring of API requests.
 - **Cons:**
   - **Increased Complexity:** Adds extra layers to the architecture, potentially delaying development.
-  - **Development Time:** For a one-week prototype, direct API calls are faster to implement.
+  - **Development Time:** For a scoped test project, direct API calls are the best approach.
   - **Scope Consideration:** Given the limited scope and prototype nature of this project, direct integration was prioritized.
 
 ### Rate Limiting
