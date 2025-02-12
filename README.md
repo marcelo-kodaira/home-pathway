@@ -2,6 +2,10 @@
 
 Live Preview: https://home-pathway-nu5t.vercel.app/
 
+End to End Tests
+![image](https://github.com/user-attachments/assets/75d6fa7a-46f6-4a5a-a1a0-b4d657eaec47)
+
+
 ## Overview
 
 This project is a prototype designed to integrate Census.gov income data into a feature that allows users to compare their personal income against regional averages. It tests a developer’s ability to combine backend API integration with a clean, responsive frontend and robust error handling.
