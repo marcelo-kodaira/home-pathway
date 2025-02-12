@@ -61,7 +61,8 @@ jobs:
       - name: Build frontend
         run: |
           echo "Building..."
-          npm run build:homol
+          cd frontend
+          npm run build
 
       - name: Deploy to S3
         run: |
